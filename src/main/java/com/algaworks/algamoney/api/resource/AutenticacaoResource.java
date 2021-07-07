@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algamoney.api.config.TokenService;
 import com.algaworks.algamoney.api.dto.TokenDto;
 import com.algaworks.algamoney.api.resource.form.LoginForm;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -27,6 +29,7 @@ public class AutenticacaoResource {
 	@Autowired
 	private TokenService tokenService;
 	
+	@CrossOrigin(maxAge = 10, origins = {"http://localhost:4200"})
 	@PostMapping
 	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form){
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();

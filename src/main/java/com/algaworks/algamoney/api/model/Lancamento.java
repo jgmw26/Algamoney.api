@@ -25,7 +25,7 @@ public class Lancamento {
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataVencimento;
-	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataPagamento;
 	@NotNull
 	private BigDecimal valor;
