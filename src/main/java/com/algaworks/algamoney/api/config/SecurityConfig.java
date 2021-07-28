@@ -46,6 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/categorias").permitAll()
 		.antMatchers(HttpMethod.POST,"/auth").permitAll()
 		.antMatchers("/lancamentos").permitAll()
+		.antMatchers("/lancamentos/small").permitAll()
+		.antMatchers("/lancamentos/small/total").permitAll()
 		.antMatchers("/pessoas").permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()

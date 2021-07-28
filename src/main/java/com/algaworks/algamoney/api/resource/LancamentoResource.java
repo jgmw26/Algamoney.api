@@ -1,7 +1,10 @@
 package com.algaworks.algamoney.api.resource;
 
 import java.time.LocalDate;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algamoney.api.event.RecursoCriadoEvent;
 import com.algaworks.algamoney.api.model.Lancamento;
+import com.algaworks.algamoney.api.model.LancamentoSmall;
 import com.algaworks.algamoney.api.repository.LancamentoRepository;
 import com.algaworks.algamoney.api.service.LancamentoService;
 
@@ -49,10 +54,11 @@ public class LancamentoResource {
 	public Page<Lancamento> Lista(@RequestParam(required = false) LocalDate dataVencimento,
 			@RequestParam(required = false) String descricao,
 			@RequestParam(required = false) String tipo,
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
-		System.out.println(dataVencimento);
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 1000) Pageable paginacao) {
+//		System.out.println(dataVencimento);
 		if (dataVencimento == null && descricao == null&&tipo==null) {
-			return lancamentoRepository.findAll(paginacao);
+			Page<Lancamento> teste = lancamentoRepository.findAll(paginacao);
+			return teste;
 		} else if (descricao == null&&tipo==null) {
 			return lancamentoRepository.findByDataVencimento(dataVencimento, paginacao);
 		} else if(tipo==null) {
@@ -60,6 +66,15 @@ public class LancamentoResource {
 		} else {
 			return lancamentoRepository.findByTipoLike(tipo, paginacao);
 		}
+	}
+	
+	@GetMapping("/small/total")
+	public List<LancamentoSmall> SmallTotalList(@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 1000) Pageable paginacao){
+		return lancamentoService.lancamentoTotalSmall(paginacao);
+	}
+	@GetMapping("/small")
+	public List<LancamentoSmall> SmallList(@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 1000) Pageable paginacao){
+		return lancamentoService.lancamentoSmall(paginacao);
 	}
 
 	@GetMapping("/{id}")
